@@ -7,6 +7,7 @@
 export default {
     mounted() {
         let d3 = this.d3
+        let a = d3.select('body')
 
     }
 }
