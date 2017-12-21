@@ -23,6 +23,7 @@ import kLine004 from '@/pages/d3/components/kLine004'
 
 import canvasRoot from '@/pages/canvas/canvasRoot'
 import canvas001 from '@/pages/canvas/components/001'
+import canvas002 from '@/pages/canvas/components/002'
 
 Vue.use(Router)
 
@@ -118,6 +119,10 @@ export default new Router({
                 {
                     path: '001',
                     component: canvas001
+                },
+                {
+                    path: '002',
+                    component: canvas002
                 },
             ]
         }
