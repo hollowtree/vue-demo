@@ -23,6 +23,9 @@ Linear.prototype = {
             case 1: this._point = 2; // proceed
             default: this._context.lineTo(x, y); break;
         }
+    },
+    move: function (x, y) {
+        this._context.moveTo(x, y);
     }
 };
 

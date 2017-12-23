@@ -6,6 +6,7 @@ import { x as pointX, y as pointY } from "./point";
 export default function () {
     var x = pointX,
         y = pointY,
+        y1 = pointY,
         defined = constant(true),
         context = null,
         curve = curveLinear,
@@ -25,7 +26,8 @@ export default function () {
                 if (defined0 = !defined0) output.lineStart();
                 else output.lineEnd();
             }
-            if (defined0) output.point(+x(d, i, data), +y(d, i, data));
+            if (defined0) output.move(+x(d, i, data), +y(d, i, data));
+            if (defined0) output.point(+x(d, i, data), +y1(d, i, data));
         }
         if (buffer) return output = null, buffer + "" || null;
     }
@@ -36,6 +38,10 @@ export default function () {
 
     line.y = function (_) {
         return arguments.length ? (y = typeof _ === "function" ? _ : constant(+_), line) : y;
+    };
+
+    line.y1 = function (_) {
+        return arguments.length ? (y1 = typeof _ === "function" ? _ : constant(+_), line) : y1;
     };
 
     line.defined = function (_) {

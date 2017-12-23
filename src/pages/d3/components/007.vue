@@ -71,9 +71,13 @@ export default {
 
         var line = d3.line()
             .x(function (d) {
+                console.log(xScale(d.x))
+
                 return xScale(d.x)
             })
             .y(function (d) {
+                console.log(yScale(d.y))
+
                 return yScale(d.y)
             })
 
