@@ -5,8 +5,12 @@ import { x as pointX, y as pointY } from "./point";
 
 export default function () {
     var x = pointX,
+        l = pointX,
         y = pointY,
         y1 = pointY,
+        y2 = pointY,
+        y3 = pointY,
+        isDraw = pointX,
         defined = constant(true),
         context = null,
         curve = curveLinear,
@@ -26,11 +30,26 @@ export default function () {
                 if (defined0 = !defined0) output.lineStart();
                 else output.lineEnd();
             }
-            if (defined0) output.move(+x(d, i, data), +y(d, i, data));
-            if (defined0) output.point(+x(d, i, data), +y1(d, i, data));
+            if (isDraw(d)) {
+                if (defined0) output.move(+x(d, i, data) - l(), +y(d));
+                if (defined0) output.point(+x(d, i, data) - l(), +y1(d));
+                if (defined0) output.point(+x(d, i, data) + l(), +y1(d));
+                if (defined0) output.point(+x(d, i, data) + l(), +y(d));
+                if (defined0) output.point(+x(d, i, data) - l(), +y(d));
+
+                if (defined0) output.move(+x(d, i, data), +y2(d));
+                if (defined0) output.point(+x(d, i, data), +y3(d));
+            }
         }
         if (buffer) return output = null, buffer + "" || null;
     }
+
+    line.isDraw = function (_) {
+        return arguments.length ? (isDraw = typeof _ === "function" ? _ : constant(+_), line) : isDraw;
+    };
+    line.l = function (_) {
+        return arguments.length ? (l = typeof _ === "function" ? _ : constant(+_), line) : l;
+    };
 
     line.x = function (_) {
         return arguments.length ? (x = typeof _ === "function" ? _ : constant(+_), line) : x;
@@ -42,6 +61,12 @@ export default function () {
 
     line.y1 = function (_) {
         return arguments.length ? (y1 = typeof _ === "function" ? _ : constant(+_), line) : y1;
+    };
+    line.y2 = function (_) {
+        return arguments.length ? (y2 = typeof _ === "function" ? _ : constant(+_), line) : y2;
+    };
+    line.y3 = function (_) {
+        return arguments.length ? (y3 = typeof _ === "function" ? _ : constant(+_), line) : y3;
     };
 
     line.defined = function (_) {

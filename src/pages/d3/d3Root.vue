@@ -15,6 +15,7 @@
             <router-link to="/d3/012">012</router-link>
             <router-link to="/d3/013">013</router-link>
             <router-link to="/d3/014">014</router-link>
+            <router-link to="/d3/015">015</router-link>
         </p>
         <p>
             <router-link to="/d3/kline001">kline001</router-link>
