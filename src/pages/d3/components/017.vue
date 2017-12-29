@@ -1,7 +1,9 @@
 <template>
-
+    <div id="chart">
+    </div>
 </template>
 <script>
+import kline from "../tools/kline";
 export default {
     mounted() {
         let d3 = this.d3

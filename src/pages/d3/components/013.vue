@@ -19,9 +19,13 @@ export default {
             svg = d3.select('#chart').append('svg').attr('width', width + 100).attr('height', height + 100),
             chart = svg.append('g')
 
-        let x = d3.scaleLinear()
-            .domain([0, data.length])
+        let x = d3.scaleBand()
+            .domain(data.map(function (val) {
+                return val.date
+            }))
             .range([0, width])
+            .paddingInner(1)
+            .paddingOuter(0.5)
 
         let y = d3.scaleLinear()
             .domain([d3.min(data, d => {
@@ -33,40 +37,34 @@ export default {
 
         var xAxis = d3.axisBottom(x),
             yAxis = d3.axisLeft(y);
-        // chart.append('g')
-        //     .attr('class', 'axis--x')
-        //     .attr('transform', 'translate(50,' + (height  -height+ 70) + ')')
-        //     .call(xAxis.tickFormat(function (d,i, data) {
-        //         return d
-        //     }))
+
         chart.append('g')
             .attr('class', 'axis--x')
-            .attr('transform', 'translate(40,50)')
-            .call(yAxis)
+            .attr('transform', 'translate(50,' + (height + 50) + ')')
+            .call(xAxis.tickValues(x.domain().filter(function (d, i) {
+                return !(i % 5)
+            })).tickFormat(function (d, i, data) {
+                return d3.timeFormat("%Y-%m-%d")(d3.isoParse(d))
+            }))
 
-        var x1 = d3.scaleLinear()
-            .domain([0, data.length - 1])
-            .range([0, width]);
+        chart.append('g')
+            .attr('class', 'axis--y')
+            .attr('transform', 'translate(50,50)')
+            .call(yAxis)
 
         let antiX1 = d3.scaleLinear()
             .domain([0, width])
             .range([0, data.length - 1]);
-
-        chart.append("g")
-            .attr('transform', 'translate(50,' + (height + 50) + ')')
-            .call(d3.axisBottom(x1).tickFormat(function (d, i) {
-                return d3.timeFormat("%Y-%m-%d")(d3.isoParse(data[d].date))
-            }))
 
         let lineRise = kline()
             .isDraw((d, i) => {
                 return d.open_price <= d.close_price
             })
             .x((d, i) => {
-                return x1(i)
+                return x(d.date)
             })
             .l(() => {
-                return x1(0.2)
+                return x.step() * 0.2
             })
             .y(d => {
                 return y(d.open_price)
@@ -85,12 +83,11 @@ export default {
             .isDraw((d, i) => {
                 return d.open_price > d.close_price
             })
-            // --- 矩形
             .x((d, i) => {
-                return x1(i)
+                return x(d.date)
             })
             .l(() => {
-                return x1(0.2)
+                return x.step() * 0.2
             })
             .y(d => {
                 return y(d.open_price)
@@ -124,7 +121,8 @@ export default {
 
         d3.selectAll('.kline')
             .on('mousemove', function (e) {
-                console.log(antiX1(d3.event.x - 50) | 0)
+                let i = Math.round((d3.event.x - 50) / x.step())
+                console.log(i)
             })
 
 
