@@ -52,10 +52,6 @@ export default {
             .attr('transform', 'translate(50,50)')
             .call(yAxis)
 
-        let antiX1 = d3.scaleLinear()
-            .domain([0, width])
-            .range([0, data.length - 1]);
-
         let lineRise = kline()
             .isDraw((d, i) => {
                 return d.open_price <= d.close_price
