@@ -119,19 +119,50 @@ export default {
             .attr('d', lineDown)
 
 
-        chart.append('rect')
-            .attr('x', 50)
-            .attr('y', 50)
+        var paintContainer = chart.append('g')
+            .attr('transform', 'translate(' + margin + ',' + margin + ')')
+        paintContainer.append('rect')
             .attr('width', width)
             .attr('height', height)
             .attr('fill', 'transparent')
             .attr('stroke', 'red')
 
-            .on('mousemove', function (e) {
-                let i1 = Math.round((d3.event.offsetX - 50) / x.step()),
-                    i2 = y.invert(d3.event.offsetY - 50)
-                console.log(i1, i2, d3.event.offsetY, d3.event)
+        let start = false,
+            lineData = [],
+            line = d3.line()
+                .x((d) => {
+                    return x(d.x)
+                })
+                .y(d => {
+                    return y(d.y)
+                })
+        paintContainer.on('click', function (d) {
+            let i1 = Math.floor((d3.event.offsetX - 50) / x.step()),
+                i2 = y.invert(d3.event.offsetY - 50)
+            lineData.push({
+                x: data[i1].date,
+                y: i2
             })
+            paintContainer.append('path')
+            start = true
+        })
+
+        paintContainer.on('mousemove', function (e) {
+            if (start) {
+                let i1 = Math.floor((d3.event.offsetX - 50) / x.step()),
+                    i2 = y.invert(d3.event.offsetY - 50)
+                lineData.push({
+                    x: data[i1].date,
+                    y: i2
+                })
+                paintContainer.select('path')
+                    .datum(lineData)
+                    .attr('fill', 'none')
+                    .attr('stroke', 'red')
+                    .attr('class', 'line')
+                    .attr('d', line)
+            }
+        })
     }
 }
 </script>
