@@ -19,6 +19,7 @@ import d3015 from '@/pages/d3/components/015'
 import d3016 from '@/pages/d3/components/016'
 import d3017 from '@/pages/d3/components/017'
 import d3018 from '@/pages/d3/components/018'
+import d3019 from '@/pages/d3/components/019'
 import kLine001 from '@/pages/d3/components/kLine001'
 import kLine002 from '@/pages/d3/components/kLine002'
 import kLine003 from '@/pages/d3/components/kLine003'
@@ -107,6 +108,10 @@ export default new Router({
                 {
                     path: '018',
                     component: d3018
+                },
+                {
+                    path: '019',
+                    component: d3019
                 },
                 {
                     path: 'kline001',
