@@ -57,7 +57,6 @@ export default {
         }
 
         var bandPos = [-1, -1];
-        var pos;
         var colors = d3.scaleOrdinal(d3.schemeCategory10);
 
         var x, y, xDomain, yDomain, xDomainMin, yDomainMin, xAxis, yAxis, zoomArea, line;
