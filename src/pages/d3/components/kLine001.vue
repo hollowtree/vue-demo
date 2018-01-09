@@ -17,6 +17,11 @@ export default {
             svg = d3.select('#chart').append('svg').attr('width', width + margin * 2).attr('height', height + margin * 2),
             chart = svg.append('g')
 
+        svg.append('defs').append('clipPath').attr('id', 'clip')
+            .append('rect')
+            .attr('width', width)
+            .attr('height', height)
+
         let x = d3.scaleBand()
             .domain(data.map(function (n) {
                 return n.date
@@ -105,14 +110,14 @@ export default {
             .datum(data)
             .attr('fill', 'red')
             .attr('stroke', 'red')
-            .attr('class', 'kline zoom-line')
+            .attr('class', 'kline zoom-line-rise')
             .attr('d', lineRise)
 
         klineContainer.append('path')
             .datum(data)
             .attr('fill', 'green')
             .attr('stroke', 'green')
-            .attr('class', 'kline zoom-line')
+            .attr('class', 'kline zoom-line-down')
             .attr('d', lineDown)
 
         var band = svg.append("rect")
@@ -126,16 +131,45 @@ export default {
         drag.on('drag', function () {
             var pos = d3.mouse(this);
             console.log(pos)
-
         })
         drag.on('end', function () {
 
         })
+
+        setTimeout(() => {
+            let zoom = d3.zoom()
+            .scaleExtent([1, 10])
+            .translateExtent([[0, 0], [width, height]])
+            .extent([[0, 0], [width, height]])
+            .on('zoom', zoomed)
+        
+            svg.call(zoom).transition()
+            .duration(500)
+            .call(zoom.transform, d3.zoomIdentity.scale(1))
+        }, 1000);
+
+        
+
+        function zoomed() {
+            let t = d3.event.transform,
+                xt = x.copy().range([t.x, width * t.k + t.x])
+            chart.select('.zoom-line-rise').attr('d', lineRise.x(function (d) { 
+                return xt(d.date) 
+            }).l(() => {
+                return xt.step() * 0.2
+            }))
+            chart.select('.zoom-line-down').attr('d', lineDown.x(function (d) { 
+                return xt(d.date) 
+            }).l(() => {
+                return xt.step() * 0.2
+            }))
+            chart.select('.axis--x').call(xAxis.scale(xt))
+        }
     }
 }
 </script>
 <style>
-.zoom-line,
+.kline,
 .zoom-area {
   clip-path: url(#clip);
 }
